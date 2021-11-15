@@ -7,25 +7,8 @@ import (
 	alg "hungarianmethod"
 )
 
-func TestStep1(t *testing.T) {
+func TestHungarian(t *testing.T) {
 	data := [][][]int64{
-		{
-			{1, 5, 8, 9},
-			{6, 7, 56, 15},
-			{2, 57, 45, 12},
-			{15, 21, 15, 16},
-		},
-		{	
-			{1, 5, 8, 9},
-			{6, 7, 56, 15},
-			{2, 57, 45, 12},
-		},
-		{
-			{1, 5, 8},
-			{6, 7, 15},
-			{2, 57, 45},
-			{15, 21, 16},
-		},
 		{
 			{20, 28, 19, 13},
 			{15, 30, 31, 28},
@@ -42,8 +25,7 @@ func TestStep1(t *testing.T) {
 	}
 
 	for i := range data {
-		table := alg.NewTable(data[i])
-		table.Step1()
-		fmt.Println(table)
+		t := alg.NewTable(data[i])
+		fmt.Println(t.Solve())
 	}
 }

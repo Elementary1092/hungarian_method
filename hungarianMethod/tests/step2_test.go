@@ -27,6 +27,6 @@ func TestStep2(t *testing.T) {
 	for i := range data {
 		table := alg.NewTable(data[i])
 		table.Step1()
-		fmt.Println(table.LinesNeededToCoverZeros())
+		fmt.Println(table.CoverZeros())
 	}
 }

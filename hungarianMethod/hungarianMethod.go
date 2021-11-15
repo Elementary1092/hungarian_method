@@ -16,17 +16,21 @@ func (p *pair) Col() int {
 }
 
 func (p *pair) String() string {
-	return fmt.Sprintf("row: %d; col: %d", p.row, p.col)
+	return fmt.Sprintf("row: %d; col: %d |", p.row, p.col)
+}
+
+func (t *Table) IsDone(linesToCover uint) bool {
+	return uint(len(t.values)) == linesToCover
 }
 
 func (t *Table) Solve() []*pair {
 	t.Step1()
 
 	minLinesNeededToCoverZeros, covered := t.CoverZeros()
-
-	for minLinesNeededToCoverZeros != uint(len(t.values)) {
+	for !t.IsDone(minLinesNeededToCoverZeros) {
+		t.Modify(covered)
 		minLinesNeededToCoverZeros, covered = t.CoverZeros()
 	}
 
-	return covered
+	return t.ChooseOperators()
 }

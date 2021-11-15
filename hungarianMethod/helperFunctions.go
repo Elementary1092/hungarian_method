@@ -11,7 +11,7 @@ func (t *Table) findMinInRow(row uint) int64 {
 	min := int64(math.MaxInt64)
 
 	for _, val := range searchIn {
-		if val < min && val != 0 {
+		if val < min {
 			min = val
 		}
 	}
@@ -22,9 +22,9 @@ func (t *Table) findMinInRow(row uint) int64 {
 func (t *Table) findMinInColumn(col uint) int64 {
 	min := int64(math.MaxInt64)
 
-	for i := range t.values {
-		if t.values[i][col] < min && t.values[i][col] != 0 {
-			min = t.values[i][col]
+	for _, row := range t.values {
+		if row[col] < min {
+			min = row[col]
 		}
 	}
 
@@ -49,6 +49,26 @@ func (t *Table) String() string {
 	}
 
 	return buffer.String()
+}
+
+func (t *Table) coordinatesOfZeros() []*pair {
+	coordinatesOfZeros := make([]*pair, 0)
+
+	for i := range t.values {
+		for j := range t.values[i] {
+			if t.values[i][j] == 0 {
+				coordinatesOfZeros = append(
+					coordinatesOfZeros,
+					&pair{
+						row: i,
+						col: j,
+					},
+				)
+			}
+		}
+	}
+
+	return coordinatesOfZeros
 }
 
 func (t *Table) findMinInUncoveredPart(rowsLeft []int, colsLeft []int) int64 {

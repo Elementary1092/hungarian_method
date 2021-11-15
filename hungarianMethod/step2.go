@@ -54,26 +54,6 @@ func (t *Table) CoverZeros() (uint, []*pair) {
 	return linesCount, coveredRowsAndCols
 }
 
-func (t *Table) coordinatesOfZeros() []*pair {
-	coordinatesOfZeros := make([]*pair, 0)
-
-	for i := range t.values {
-		for j := range t.values[i] {
-			if t.values[i][j] == 0 {
-				coordinatesOfZeros = append(
-					coordinatesOfZeros,
-					&pair{
-						row: i,
-						col: j,
-					},
-				)
-			}
-		}
-	}
-
-	return coordinatesOfZeros
-}
-
 func arrangeByRows(numberOfRows int, zerosCoordinates []*pair) [][]*pair {
 	rowsByArrangment := make([][]*pair, numberOfRows)
 
@@ -133,7 +113,7 @@ func deleteCol(zerosInRow, zerosInCol [][]*pair, p *pair) ([][]*pair, [][]*pair)
 
 func deleteRow(zerosInCol [][]*pair, p *pair) [][]*pair {
 	for i := range zerosInCol {
-		for j := 0; i < len(zerosInCol[i]); j++ {
+		for j := 0; j < len(zerosInCol[i]); j++ {
 			if zerosInCol[i][j].row == p.row {
 				zerosInCol[i] = deleteFromArray(zerosInCol[i], j)
 				j--
