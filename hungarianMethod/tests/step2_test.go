@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	alg "hungarianMethod"
+	alg "hungarianmethod"
 )
 
 func TestStep2(t *testing.T) {

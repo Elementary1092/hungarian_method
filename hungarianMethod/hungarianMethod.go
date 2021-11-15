@@ -15,9 +15,8 @@ func (p *pair) Col() uint {
 
 func (t *Table) Solve() *pair {
 	t.Step1()
-	if t.LinesNeededToCoverZeros() == uint(len(t.values)) {
-		return nil
-	}
+	
+	
 
 	return nil
 }

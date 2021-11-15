@@ -64,3 +64,15 @@ func (t *Table) findMinInUncoveredPart(rowsLeft []int, colsLeft []int) int64 {
 
 	return min
 }
+
+func deleteFromArray(arr []*pair, toBeDeleted int) []*pair {
+	arr = append(arr[:toBeDeleted], arr[(toBeDeleted+1):]...)
+
+	return arr
+}
+
+func deleteFrom2DArray(arr [][]*pair, toBeDeleted int) [][]*pair {
+	arr = append(arr[:toBeDeleted], arr[(toBeDeleted + 1):]...)
+
+	return arr
+}
