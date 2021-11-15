@@ -1,10 +1,11 @@
 package hungarianmethod
 
-func (t *Table) LinesNeededToCoverZeros() uint {
+func (t *Table) CoverZeros() (uint, []*pair) {
 	zerosCoordinates := t.coordinatesOfZeros()
 	zerosArrangedByRows := arrangeByRows(len(t.values), zerosCoordinates)
 	zerosArrangedByCols := arrangeByCols(len(t.values), zerosCoordinates)
 	var linesCount uint
+	var coveredRowsAndCols []*pair
 
 	for _, zerosInRow := range zerosArrangedByRows {
 		if len(zerosInRow) != 0 {
@@ -18,21 +19,39 @@ func (t *Table) LinesNeededToCoverZeros() uint {
 						zerosArrangedByCols,
 						coord,
 					)
+
+					coveredRowsAndCols = append(
+						coveredRowsAndCols, 
+						&pair{
+							row: -1,
+							col: coord.col,
+						},
+					)
 				}
 			} else {
+				rowNum := zerosInRow[0].row
+
 				for _, coord := range zerosInRow {
 					zerosArrangedByCols = deleteRow(
 						zerosArrangedByCols,
 						coord,
 					)
 				}
-				
+
+				coveredRowsAndCols = append(
+					coveredRowsAndCols, 
+					&pair{
+						row: rowNum,
+						col: -1,
+					},
+				)
+
 				linesCount++
 			}
 		}
 	}
 
-	return linesCount
+	return linesCount, coveredRowsAndCols
 }
 
 func (t *Table) coordinatesOfZeros() []*pair {
@@ -44,8 +63,8 @@ func (t *Table) coordinatesOfZeros() []*pair {
 				coordinatesOfZeros = append(
 					coordinatesOfZeros,
 					&pair{
-						row: uint(i),
-						col: uint(j),
+						row: i,
+						col: j,
 					},
 				)
 			}
