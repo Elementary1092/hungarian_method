@@ -10,7 +10,7 @@ func (t *Table) CoverZeros() (uint, []*pair) {
 	for _, zerosInRow := range zerosArrangedByRows {
 		if len(zerosInRow) != 0 {
 			maxZerosInCol := maxAmountOfZerosInCol(zerosArrangedByCols)
-			if len(zerosInRow) < maxZerosInCol {
+			if len(zerosInRow) < maxZerosInCol && len(zerosInRow) < 3 {
 				linesCount += uint(len(zerosInRow))
 
 				for _, coord := range zerosInRow {

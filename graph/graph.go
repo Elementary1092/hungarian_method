@@ -3,7 +3,7 @@ package graph
 import (
 	"errors"
 
-	list "linkedList"
+	list "linkedlist"
 )
 
 type Graph struct {
