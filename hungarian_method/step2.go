@@ -1,4 +1,4 @@
-package hungarianmethod
+package hungarian_method
 
 func (t *Table) CoverZeros() (uint, []*pair) {
 	zerosCoordinates := t.coordinatesOfZeros()

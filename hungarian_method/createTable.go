@@ -1,4 +1,4 @@
-package hungarianmethod;
+package hungarian_method
 
 type Table struct {
 	values            [][]int64

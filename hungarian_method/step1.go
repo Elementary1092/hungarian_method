@@ -1,4 +1,4 @@
-package hungarianmethod
+package hungarian_method
 
 func (t *Table) Step1() {
 	t.reduceRows()
