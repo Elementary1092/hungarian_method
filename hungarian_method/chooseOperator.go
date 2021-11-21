@@ -55,16 +55,3 @@ func returnElemsExceptFirstRowAndCol(zeros [][]*pair, colNum int) [][]*pair {
 
 	return res
 }
-/*
-func deleteCols(zeros [][]*pair, colNum int) [][]*pair {
-	for i := range zeros {
-		for j := 0; j < len(zeros[i]); j++ {
-			if zeros[i][j].col == colNum {
-				zeros[i] = append(zeros[i][:j], zeros[i][(j+1):]...)
-				j--
-			}
-		}
-	}
-
-	return zeros
-}*/
