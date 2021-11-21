@@ -2,7 +2,7 @@ package hungarian_method
 
 import "sync"
 
-func (t *Table) Modify(covered []*pair) {
+func (t *Table) Modify(covered []*Pair) {
 	rowsLeft, colsLeft := t.identifyUncoveredPart(covered)
 
 	minVal := t.findMinInUncoveredPart(rowsLeft, colsLeft)
@@ -31,7 +31,7 @@ func (t *Table) Modify(covered []*pair) {
 	}
 }
 
-func (t *Table) identifyUncoveredPart(covered []*pair) ([]int, []int) {
+func (t *Table) identifyUncoveredPart(covered []*Pair) ([]int, []int) {
 	rowsLeft := make([]int, len(t.values))
 	colsLeft := make([]int, len(t.values))
 

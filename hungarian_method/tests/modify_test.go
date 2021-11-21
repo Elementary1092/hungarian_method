@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	alg "hungarianmethod"
+	alg "hungarian_method"
 )
 
 func TestModify(t *testing.T) {

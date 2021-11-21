@@ -2,8 +2,8 @@ package main
 
 import (
 	"flag"
-	"fmt"
 
+	out "display_results"
 	alg "hungarian_method"
 	in "input_data"
 )
@@ -62,5 +62,5 @@ func main() {
 	data := inputMethod.GetData()
 
 	t := alg.NewTable(data)
-	fmt.Println(t.Solve())
+	out.Display(data, t.Solve())
 }

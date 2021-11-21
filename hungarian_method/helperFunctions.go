@@ -51,15 +51,15 @@ func (t *Table) String() string {
 	return buffer.String()
 }
 
-func (t *Table) coordinatesOfZeros() []*pair {
-	coordinatesOfZeros := make([]*pair, 0)
+func (t *Table) coordinatesOfZeros() []*Pair {
+	coordinatesOfZeros := make([]*Pair, 0)
 
 	for i := range t.values {
 		for j := range t.values[i] {
 			if t.values[i][j] == 0 {
 				coordinatesOfZeros = append(
 					coordinatesOfZeros,
-					&pair{
+					&Pair{
 						row: i,
 						col: j,
 					},
@@ -85,13 +85,13 @@ func (t *Table) findMinInUncoveredPart(rowsLeft []int, colsLeft []int) int64 {
 	return min
 }
 
-func deleteFromArray(arr []*pair, toBeDeleted int) []*pair {
+func deleteFromArray(arr []*Pair, toBeDeleted int) []*Pair {
 	arr = append(arr[:toBeDeleted], arr[(toBeDeleted+1):]...)
 
 	return arr
 }
 
-func deleteFrom2DArray(arr [][]*pair, toBeDeleted int) [][]*pair {
+func deleteFrom2DArray(arr [][]*Pair, toBeDeleted int) [][]*Pair {
 	arr = append(arr[:toBeDeleted], arr[(toBeDeleted + 1):]...)
 
 	return arr
