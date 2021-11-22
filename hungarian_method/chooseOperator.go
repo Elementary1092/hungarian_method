@@ -1,8 +1,8 @@
 package hungarian_method
 
-func (t *Table) ChooseOperators() []*Pair {
+func (t *Table) ChooseOperators() []*Coord {
 	coordsOfZeros := t.coordinatesOfZeros()
-	rowsWithZeros := make([][]*Pair, len(t.values))
+	rowsWithZeros := make([][]*Coord, len(t.values))
 	
 	for _, coord := range coordsOfZeros {
 		rowsWithZeros[coord.row] = append(rowsWithZeros[coord.row], coord)
@@ -11,7 +11,7 @@ func (t *Table) ChooseOperators() []*Pair {
 	return getPossibleResults(rowsWithZeros, len(t.values))
 }
 
-func getPossibleResults(zeros [][]*Pair, shouldConsider int) []*Pair {
+func getPossibleResults(zeros [][]*Coord, shouldConsider int) []*Coord {
 	if len(zeros) == 0 {
 		return nil
 	}
@@ -20,7 +20,7 @@ func getPossibleResults(zeros [][]*Pair, shouldConsider int) []*Pair {
 		return zeros[0]
 	}
 
-	res := make([]*Pair, 0)
+	res := make([]*Coord, 0)
 	for j := range zeros[0] {
 		temp := getPossibleResults(
 			returnElemsExceptFirstRowAndCol(zeros, zeros[0][j].col),
@@ -36,11 +36,11 @@ func getPossibleResults(zeros [][]*Pair, shouldConsider int) []*Pair {
 	return res
 }
 
-func returnElemsExceptFirstRowAndCol(zeros [][]*Pair, colNum int) [][]*Pair {
-	res := make([][]*Pair, 0)
+func returnElemsExceptFirstRowAndCol(zeros [][]*Coord, colNum int) [][]*Coord {
+	res := make([][]*Coord, 0)
 	
 	for i := 1; i < len(zeros); i++ {
-		temp := make([]*Pair, 0)
+		temp := make([]*Coord, 0)
 
 		for j := range zeros[i] {
 			if zeros[i][j].col != colNum {

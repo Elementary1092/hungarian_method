@@ -2,14 +2,14 @@ package hungarian_method
 
 import "sync"
 
-func (t *Table) Modify(covered []*Pair) {
+func (t *Table) Modify(covered []*Coord) {
 	rowsLeft, colsLeft := t.identifyUncoveredPart(covered)
 
 	minVal := t.findMinInUncoveredPart(rowsLeft, colsLeft)
 
 	for _, i := range rowsLeft {
 		for _, j := range colsLeft {
-			t.values[i][j] -= minVal
+			t.values[i][j].weight -= minVal
 		}
 	}
 
@@ -26,12 +26,12 @@ func (t *Table) Modify(covered []*Pair) {
 
 	for _, row := range coveredRows {
 		for _, col := range coveredCols {
-			t.values[row][col] += minVal
+			t.values[row][col].weight += minVal
 		}
 	}
 }
 
-func (t *Table) identifyUncoveredPart(covered []*Pair) ([]int, []int) {
+func (t *Table) identifyUncoveredPart(covered []*Coord) ([]int, []int) {
 	rowsLeft := make([]int, len(t.values))
 	colsLeft := make([]int, len(t.values))
 

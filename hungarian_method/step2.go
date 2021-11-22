@@ -1,11 +1,11 @@
 package hungarian_method
 
-func (t *Table) CoverZeros() (uint, []*Pair) {
+func (t *Table) CoverZeros() (uint, []*Coord) {
 	zerosCoordinates := t.coordinatesOfZeros()
 	zerosArrangedByRows := arrangeByRows(len(t.values), zerosCoordinates)
 	zerosArrangedByCols := arrangeByCols(len(t.values), zerosCoordinates)
 	var linesCount uint
-	var coveredRowsAndCols []*Pair
+	var coveredRowsAndCols []*Coord
 
 	for _, zerosInRow := range zerosArrangedByRows {
 		if len(zerosInRow) != 0 {
@@ -22,7 +22,7 @@ func (t *Table) CoverZeros() (uint, []*Pair) {
 
 					coveredRowsAndCols = append(
 						coveredRowsAndCols, 
-						&Pair{
+						&Coord{
 							row: -1,
 							col: coord.col,
 						},
@@ -40,7 +40,7 @@ func (t *Table) CoverZeros() (uint, []*Pair) {
 
 				coveredRowsAndCols = append(
 					coveredRowsAndCols, 
-					&Pair{
+					&Coord{
 						row: rowNum,
 						col: -1,
 					},
@@ -54,8 +54,8 @@ func (t *Table) CoverZeros() (uint, []*Pair) {
 	return linesCount, coveredRowsAndCols
 }
 
-func arrangeByRows(numberOfRows int, zerosCoordinates []*Pair) [][]*Pair {
-	rowsByArrangment := make([][]*Pair, numberOfRows)
+func arrangeByRows(numberOfRows int, zerosCoordinates []*Coord) [][]*Coord {
+	rowsByArrangment := make([][]*Coord, numberOfRows)
 
 	for _, coords := range zerosCoordinates {
 		rowsByArrangment[coords.row] = append(rowsByArrangment[coords.row], coords)
@@ -64,8 +64,8 @@ func arrangeByRows(numberOfRows int, zerosCoordinates []*Pair) [][]*Pair {
 	return rowsByArrangment
 }
 
-func arrangeByCols(numberOfCols int, zerosCoordinates []*Pair) [][]*Pair {
-	colsByArrangment := make([][]*Pair, numberOfCols)
+func arrangeByCols(numberOfCols int, zerosCoordinates []*Coord) [][]*Coord {
+	colsByArrangment := make([][]*Coord, numberOfCols)
 
 	for _, coords := range zerosCoordinates {
 		colsByArrangment[coords.col] = append(colsByArrangment[coords.col], coords)
@@ -74,7 +74,7 @@ func arrangeByCols(numberOfCols int, zerosCoordinates []*Pair) [][]*Pair {
 	return colsByArrangment
 }
 
-func maxAmountOfZerosInCol(zerosInCols [][]*Pair) int {
+func maxAmountOfZerosInCol(zerosInCols [][]*Coord) int {
 	var max int
 
 	for _, zerosInCol := range zerosInCols {
@@ -86,7 +86,7 @@ func maxAmountOfZerosInCol(zerosInCols [][]*Pair) int {
 	return max
 }
 
-func deleteCol(zerosInRow, zerosInCol [][]*Pair, p *Pair) ([][]*Pair, [][]*Pair) {
+func deleteCol(zerosInRow, zerosInCol [][]*Coord, p *Coord) ([][]*Coord, [][]*Coord) {
 	for i := 0; i < len(zerosInCol); i++ {
 		if len(zerosInCol[i]) == 0 {
 			continue
@@ -111,7 +111,7 @@ func deleteCol(zerosInRow, zerosInCol [][]*Pair, p *Pair) ([][]*Pair, [][]*Pair)
 	return zerosInRow, zerosInCol
 }
 
-func deleteRow(zerosInCol [][]*Pair, p *Pair) [][]*Pair {
+func deleteRow(zerosInCol [][]*Coord, p *Coord) [][]*Coord {
 	for i := range zerosInCol {
 		for j := 0; j < len(zerosInCol[i]); j++ {
 			if zerosInCol[i][j].row == p.row {

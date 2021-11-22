@@ -10,7 +10,7 @@ func (t *Table) reduceRows() {
 		minVal := t.findMinInRow(uint(i))
 
 		for j := range t.values[i] {
-			t.values[i][j] -= minVal
+			t.values[i][j].weight -= minVal
 		} 
 	}
 }
@@ -20,7 +20,7 @@ func (t *Table) reduceColumns() {
 		minVal := t.findMinInColumn(uint(j))
 
 		for i := 0; i < len(t.values); i++ {
-			t.values[i][j] -= minVal
+			t.values[i][j].weight -= minVal
 		}
 	}
 }

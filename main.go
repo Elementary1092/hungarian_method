@@ -62,5 +62,5 @@ func main() {
 	data := inputMethod.GetData()
 
 	t := alg.NewTable(data)
-	out.Display(data, t.Solve())
+	out.Display(t, t.Solve())
 }
