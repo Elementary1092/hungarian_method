@@ -5,9 +5,9 @@ type Table struct {
 }
 
 func NewTable(vals [][]int64) *Table {
-	/*if len(vals) != len(vals[0]) {
-		return makeUpSqureTable(vals)
-	}*/
+	if len(vals) != len(vals[0]) {
+		panic("Expected square matrix")
+	}
 
 	var table = &Table{
 		values:         make([][]*Pair, len(vals)),
@@ -28,30 +28,3 @@ func NewTable(vals [][]int64) *Table {
 func (t *Table) ValueAt(row, col int) int64 {
 	return t.values[row][col].value
 }
-/*
-func makeUpSqureTable(vals [][]int64) *Table {
-	if len(vals) < len(vals[0]) {
-		table := &Table{
-			values:            make([][]int64, len(vals[0])),
-		}
-
-		rowsCopied := copy(table.values, vals)
-
-		for i := rowsCopied; i < len(table.values); i++ {
-			table.values[i] = make([]int64, len(table.values))
-		}
-
-		return table
-	}
-	
-	table := &Table{
-		values:         make([][]int64, len(vals)),
-	}
-
-	for i := 0; i < len(vals); i++ {
-		table.values[i] = make([]int64, len(vals))
-		copy(table.values[i], vals[i])
-	}
-
-	return table
-}*/
