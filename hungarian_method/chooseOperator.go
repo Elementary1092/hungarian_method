@@ -1,17 +1,23 @@
 package hungarian_method
 
-func (t *Table) ChooseOperators() []*Coord {
+import (
+	c "coord"
+)
+
+func (t *Table) ChooseOperators() []*c.Coord {
 	coordsOfZeros := t.coordinatesOfZeros()
-	rowsWithZeros := make([][]*Coord, len(t.values))
+	rowsWithZeros := make([][]*c.Coord, len(t.values))
 	
-	for _, coord := range coordsOfZeros {
-		rowsWithZeros[coord.row] = append(rowsWithZeros[coord.row], coord)
+	cur := coordsOfZeros.GetFirstNode()
+	for cur != nil {
+		rowsWithZeros[cur.Coord.Row()] = append(rowsWithZeros[cur.Coord.Row()], cur.Coord)
+		cur = cur.Next()
 	}
 	
 	return getPossibleResults(rowsWithZeros, len(t.values))
 }
 
-func getPossibleResults(zeros [][]*Coord, shouldConsider int) []*Coord {
+func getPossibleResults(zeros [][]*c.Coord, shouldConsider int) []*c.Coord {
 	if len(zeros) == 0 {
 		return nil
 	}
@@ -20,10 +26,10 @@ func getPossibleResults(zeros [][]*Coord, shouldConsider int) []*Coord {
 		return zeros[0]
 	}
 
-	res := make([]*Coord, 0)
+	res := make([]*c.Coord, 0)
 	for j := range zeros[0] {
 		temp := getPossibleResults(
-			returnElemsExceptFirstRowAndCol(zeros, zeros[0][j].col),
+			returnElemsExceptFirstRowAndCol(zeros, zeros[0][j].Col()),
 			shouldConsider - 1,
 		)
 
@@ -36,14 +42,14 @@ func getPossibleResults(zeros [][]*Coord, shouldConsider int) []*Coord {
 	return res
 }
 
-func returnElemsExceptFirstRowAndCol(zeros [][]*Coord, colNum int) [][]*Coord {
-	res := make([][]*Coord, 0)
+func returnElemsExceptFirstRowAndCol(zeros [][]*c.Coord, colNum int) [][]*c.Coord {
+	res := make([][]*c.Coord, 0)
 	
 	for i := 1; i < len(zeros); i++ {
-		temp := make([]*Coord, 0)
+		temp := make([]*c.Coord, 0)
 
 		for j := range zeros[i] {
-			if zeros[i][j].col != colNum {
+			if zeros[i][j].Col() != colNum {
 				temp = append(temp, zeros[i][j])
 			}
 		}

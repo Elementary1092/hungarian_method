@@ -1,49 +1,45 @@
 package hungarian_method
 
-func (t *Table) CoverZeros() (uint, []*Coord) {
-	zerosCoordinates := t.coordinatesOfZeros()
-	zerosArrangedByRows := arrangeByRows(len(t.values), zerosCoordinates)
-	zerosArrangedByCols := arrangeByCols(len(t.values), zerosCoordinates)
+import (
+	c "coord"
+	ll "linked_list"
+)
+
+func (t *Table) CoverZeros() (uint, []*c.Coord) {
+	zerosCoords := t.coordinatesOfZeros()
+	zerosArrangedByRows := arrangeByRows(len(t.values), zerosCoords)
+	zerosArrangedByCols := arrangeByCols(len(t.values), zerosCoords)
 	var linesCount uint
-	var coveredRowsAndCols []*Coord
+	var coveredRowsAndCols []*c.Coord
 
 	for _, zerosInRow := range zerosArrangedByRows {
-		if len(zerosInRow) != 0 {
+		if zerosInRow.Len() != 0 {
 			maxZerosInCol := maxAmountOfZerosInCol(zerosArrangedByCols)
-			if len(zerosInRow) < maxZerosInCol && len(zerosInRow) < 3 {
-				linesCount += uint(len(zerosInRow))
+			if zerosInRow.Len() < maxZerosInCol && zerosInRow.Len() < 3 {
+				linesCount += uint(zerosInRow.Len())
 
-				for _, coord := range zerosInRow {
-					zerosArrangedByRows, zerosArrangedByCols = deleteCol(
-						zerosArrangedByRows,
-						zerosArrangedByCols,
-						coord,
-					)
+				cur := zerosInRow.GetFirstNode()
+				for cur != nil {
+					deleteCol(zerosArrangedByRows, zerosArrangedByCols, cur.Coord)
 
 					coveredRowsAndCols = append(
 						coveredRowsAndCols, 
-						&Coord{
-							row: -1,
-							col: coord.col,
-						},
+						c.NewCoord(-1, cur.Coord.Col()),
 					)
+					cur = cur.Next()
 				}
 			} else {
-				rowNum := zerosInRow[0].row
+				rowNum := zerosInRow.GetFirstNode().Coord.Row()
 
-				for _, coord := range zerosInRow {
-					zerosArrangedByCols = deleteRow(
-						zerosArrangedByCols,
-						coord,
-					)
+				cur := zerosInRow.GetFirstNode()
+				for cur != nil {
+					deleteRow(zerosArrangedByCols, cur.Coord)
+					cur = cur.Next()
 				}
 
 				coveredRowsAndCols = append(
 					coveredRowsAndCols, 
-					&Coord{
-						row: rowNum,
-						col: -1,
-					},
+					c.NewCoord(rowNum, -1),
 				)
 
 				linesCount++
@@ -54,72 +50,66 @@ func (t *Table) CoverZeros() (uint, []*Coord) {
 	return linesCount, coveredRowsAndCols
 }
 
-func arrangeByRows(numberOfRows int, zerosCoordinates []*Coord) [][]*Coord {
-	rowsByArrangment := make([][]*Coord, numberOfRows)
+func arrangeByRows(numberOfRows int, zerosCoords *ll.List) []*ll.List {
+	rowsByArrangment := make([]*ll.List, numberOfRows)
+	for i := 0; i < numberOfRows; i++ {
+		rowsByArrangment[i] = ll.NewList()
+	}
 
-	for _, coords := range zerosCoordinates {
-		rowsByArrangment[coords.row] = append(rowsByArrangment[coords.row], coords)
+	cur := zerosCoords.GetFirstNode()
+	for cur != nil {
+		add := ll.NewNode(cur.Coord)
+		rowsByArrangment[cur.Coord.Row()].Add(add)
+		cur = cur.Next()
 	}
 
 	return rowsByArrangment
 }
 
-func arrangeByCols(numberOfCols int, zerosCoordinates []*Coord) [][]*Coord {
-	colsByArrangment := make([][]*Coord, numberOfCols)
+func arrangeByCols(numberOfCols int, zerosCoords *ll.List) []*ll.List {
+	colsByArrangment := make([]*ll.List, numberOfCols)
+	for i := 0; i < numberOfCols; i++ {
+		colsByArrangment[i] = ll.NewList()
+	}
 
-	for _, coords := range zerosCoordinates {
-		colsByArrangment[coords.col] = append(colsByArrangment[coords.col], coords)
+	cur := zerosCoords.GetFirstNode()
+	for cur != nil {
+		add := ll.NewNode(cur.Coord)
+		colsByArrangment[cur.Coord.Col()].Add(add)
+		cur = cur.Next()
 	}
 
 	return colsByArrangment
 }
 
-func maxAmountOfZerosInCol(zerosInCols [][]*Coord) int {
+func maxAmountOfZerosInCol(zerosInCols []*ll.List) int {
 	var max int
 
 	for _, zerosInCol := range zerosInCols {
-		if len(zerosInCol) > max {
-			max = len(zerosInCol)
+		if zerosInCol.Len() > max {
+			max = zerosInCol.Len()
 		}
 	}
 
 	return max
 }
 
-func deleteCol(zerosInRow, zerosInCol [][]*Coord, p *Coord) ([][]*Coord, [][]*Coord) {
+func deleteCol(zerosInRow, zerosInCol []*ll.List, p *c.Coord) {
 	for i := 0; i < len(zerosInCol); i++ {
-		if len(zerosInCol[i]) == 0 {
+		if zerosInCol[i].Len() == 0 {
 			continue
 		}
 
-		if zerosInCol[i][0].col == p.col {
-			zerosInCol = deleteFrom2DArray(zerosInCol, i)
-
-			break
-		}
+		zerosInCol[i].DeleteEntriesWithCol(p.Col())
 	}
 
 	for i := range zerosInRow {
-		for j := 0; j < len(zerosInRow[i]); j++ {
-			if zerosInRow[i][j].col == p.col {
-				zerosInRow[i] = deleteFromArray(zerosInRow[i], j)
-				j--
-			}
-		}
+		zerosInRow[i].DeleteEntriesWithCol(p.Col())
 	}
-
-	return zerosInRow, zerosInCol
 }
 
-func deleteRow(zerosInCol [][]*Coord, p *Coord) [][]*Coord {
+func deleteRow(zerosInCol []*ll.List, p *c.Coord) {
 	for i := range zerosInCol {
-		for j := 0; j < len(zerosInCol[i]); j++ {
-			if zerosInCol[i][j].row == p.row {
-				zerosInCol[i] = deleteFromArray(zerosInCol[i], j)
-				j--
-			}
-		}
+		zerosInCol[i].DeleteEntriesWithRow(p.Row())
 	}
-
-	return zerosInCol
 }

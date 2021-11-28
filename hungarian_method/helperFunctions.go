@@ -4,6 +4,9 @@ import (
 	"math"
 	"strconv"
 	"strings"
+
+	"coord"
+	ll "linked_list"
 )
 
 func (t *Table) findMinInRow(row uint) int64 {
@@ -51,19 +54,17 @@ func (t *Table) String() string {
 	return buffer.String()
 }
 
-func (t *Table) coordinatesOfZeros() []*Coord {
-	coordinatesOfZeros := make([]*Coord, 0)
+func (t *Table) coordinatesOfZeros() *ll.List {
+	coordinatesOfZeros := ll.NewList()
 
 	for i := range t.values {
 		for j := range t.values[i] {
 			if t.values[i][j].weight == 0 {
-				coordinatesOfZeros = append(
-					coordinatesOfZeros,
-					&Coord{
-						row: i,
-						col: j,
-					},
-				)
+				coordinatesOfZeros.Add(
+					ll.NewNode(
+						coord.NewCoord(i, j),
+						),
+					)
 			}
 		}
 	}
@@ -83,16 +84,4 @@ func (t *Table) findMinInUncoveredPart(rowsLeft []int, colsLeft []int) int64 {
 	}
 
 	return min
-}
-
-func deleteFromArray(arr []*Coord, toBeDeleted int) []*Coord {
-	arr = append(arr[:toBeDeleted], arr[(toBeDeleted+1):]...)
-
-	return arr
-}
-
-func deleteFrom2DArray(arr [][]*Coord, toBeDeleted int) [][]*Coord {
-	arr = append(arr[:toBeDeleted], arr[(toBeDeleted + 1):]...)
-
-	return arr
 }

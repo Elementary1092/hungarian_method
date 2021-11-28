@@ -1,8 +1,11 @@
 package hungarian_method
 
-import "sync"
+import (
+	"sync"
+	c "coord"
+)
 
-func (t *Table) Modify(covered []*Coord) {
+func (t *Table) Modify(covered []*c.Coord) {
 	rowsLeft, colsLeft := t.identifyUncoveredPart(covered)
 
 	minVal := t.findMinInUncoveredPart(rowsLeft, colsLeft)
@@ -17,10 +20,10 @@ func (t *Table) Modify(covered []*Coord) {
 	coveredCols := make([]int, 0)
 
 	for _, p := range covered {
-		if p.row != -1 {
-			coveredRows = append(coveredRows, p.row)
+		if p.Row() != -1 {
+			coveredRows = append(coveredRows, p.Row())
 		} else {
-			coveredCols = append(coveredCols, p.col)
+			coveredCols = append(coveredCols, p.Col())
 		}
 	}
 
@@ -31,7 +34,7 @@ func (t *Table) Modify(covered []*Coord) {
 	}
 }
 
-func (t *Table) identifyUncoveredPart(covered []*Coord) ([]int, []int) {
+func (t *Table) identifyUncoveredPart(covered []*c.Coord) ([]int, []int) {
 	rowsLeft := make([]int, len(t.values))
 	colsLeft := make([]int, len(t.values))
 
@@ -51,10 +54,10 @@ func (t *Table) identifyUncoveredPart(covered []*Coord) ([]int, []int) {
 	wg.Wait()
 
 	for _, p := range covered {
-		if p.row != -1 {
-			rowsLeft[p.row] = 0
+		if p.Row() != -1 {
+			rowsLeft[p.Row()] = 0
 		} else {
-			colsLeft[p.col] = 0
+			colsLeft[p.Col()] = 0
 		}
 	}
 

@@ -17,8 +17,8 @@ func (c *CMDInput) GetData() [][]int64 {
 		for j := 0; j < n; j++ {
 			fmt.Printf(
 				"Enter cost of the work %d if %dth worker does this work: ", 
-				i, 
-				j,
+				i+1, 
+				j+1,
 			)
 			
 			fmt.Scan(&row[j])
